@@ -1,0 +1,27 @@
+syntax="proto3";
+
+option go_package = "/FishingValleyProto";
+
+// 验证登录信息 1
+message ConfirmLogin{
+  string key = 1; //由登录服务器传递的登录凭证
+}
+
+// 验证登录信息的回复 1
+message ConfirmLoginResponse{
+  bool success = 1;
+  uint32 id = 2;
+  string content = 3;
+}
+
+// 客户端准备完毕 2
+message UserReady{
+
+}
+
+// 用户移动 3
+message Movement{
+  uint32 uid = 1;
+  double x = 2;
+  double y = 3;
+}
