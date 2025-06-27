@@ -22,9 +22,7 @@ func (u *User) SendMsg(msgID uint32, msg proto.Message) error {
 	return u.Conn.SendBuffMsg(msgID, data)
 }
 
-func (u *User) Move(x float64, y float64) {
-	u.Lock()
-	defer u.Unlock()
+func (u *User) Move(x int32, y int32) {
 	u.coordinate.X = x
 	u.coordinate.Y = y
 }

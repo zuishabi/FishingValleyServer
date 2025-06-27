@@ -21,9 +21,10 @@ func onConnStop(connection ziface.IConnection) {
 	core.Omap.RemoveUser(user.UID)
 }
 
+// 122.228.237.118:34896
 func main() {
 	go syncUsers()
-	c := ZSC.NewClient("127.0.0.1", 8880, "FishingValley", nil, "127.0.0.1:9999")
+	c := ZSC.NewClient("122.228.237.118", 34896, "FishingValley", nil, "127.0.0.1:9999")
 	if err := c.Start(); err != nil {
 		fmt.Println(err)
 		return
@@ -33,13 +34,14 @@ func main() {
 	utils.InitLogger(0)
 	s.AddRouter(1, &routers.LoginRouter{})
 	s.AddRouter(3, &routers.MovementRouter{})
+	s.AddRouter(4, &routers.PlayerNameRouter{})
 	s.Serve()
 }
 
 func syncUsers() {
 	for {
 		select {
-		case <-time.After(time.Millisecond * 100):
+		case <-time.After(time.Millisecond * 50):
 			users := core.Omap.GetAllUsersView()
 			coordinates := make([]FishingValleyProto.Movement, len(users))
 			for i, v := range users {

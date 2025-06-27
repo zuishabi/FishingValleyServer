@@ -22,6 +22,18 @@ message UserReady{
 // 用户移动 3
 message Movement{
   uint32 uid = 1;
-  double x = 2;
-  double y = 3;
+  int32 x = 2;
+  int32 y = 3;
+}
+
+// 信息请求
+// 请求一个用户的名字 10
+message PlayerNameReq{
+  uint32 uid = 1;
+}
+
+// 请求用户名字的回应 10
+message PlayerNameRsp{
+  uint32 uid = 1;
+  string name = 2;
 }

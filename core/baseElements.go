@@ -8,6 +8,6 @@ type UserView struct {
 }
 
 type Coordinate struct {
-	X float64
-	Y float64
+	X int32
+	Y int32
 }
