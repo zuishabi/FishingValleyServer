@@ -18,6 +18,7 @@ func (p *PlayerNameRouter) Handle(request ziface.IRequest) {
 	_ = proto.Unmarshal(request.GetData(), &req)
 	user := core.Omap.GetUserByConn(request.GetConnection())
 	u := core.Omap.GetUser(req.Uid)
+	fmt.Println("req.uid = ", req.Uid)
 	rsp := FishingValleyProto.PlayerNameRsp{
 		Uid:  u.UID,
 		Name: u.UserName,

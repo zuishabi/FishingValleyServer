@@ -16,4 +16,6 @@ type OnUserReadyRouter struct {
 func (o *OnUserReadyRouter) Handle(request ziface.IRequest) {
 	user := core.Omap.GetUserByConn(request.GetConnection())
 	user.OnUserReady()
+	// 将用户加入一个区域
+	core.AddUserToMap(user, 1)
 }

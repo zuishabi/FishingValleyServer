@@ -26,6 +26,24 @@ message Movement{
   int32 y = 3;
 }
 
+// 用户离开游戏 4
+message PlayerLeave{
+  uint32 uid = 1;
+}
+
+// 玩家区块改变 5
+message PlayerChunkChange{
+  uint32 chunk_x = 1;
+  uint32 chunk_y = 2;
+}
+
+// 服务器传送玩家(用于传送等) 6
+message TransmitPlayer{
+  uint32 area_id = 1; // 传送的区域id
+  int32 x = 2;
+  int32 y = 3;
+}
+
 // 信息请求
 // 请求一个用户的名字 10
 message PlayerNameReq{
