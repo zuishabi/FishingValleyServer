@@ -23,7 +23,7 @@ func (p *PlayerNameRouter) Handle(request ziface.IRequest) {
 		Uid:  u.UID,
 		Name: u.UserName,
 	}
-	if err := user.SendMsg(4, &rsp); err != nil {
+	if err := user.SendMsg(10, &rsp); err != nil {
 		fmt.Println(err)
 	}
 }

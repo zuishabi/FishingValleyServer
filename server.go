@@ -18,7 +18,12 @@ func onConnStop(connection ziface.IConnection) {
 		fmt.Println("当前用户不存在")
 		return
 	}
-	// 广播退出信息
+	// 向周围玩家广播退出信息
+	msg := FishingValleyProto.PlayerLeave{Uid: user.UID}
+	user.SendMsgAround(4, &msg)
+	user.PlayerState.PosLock.RLock()
+	core.Areas[user.PlayerState.AreaID].Grids[user.PlayerState.ChunkID.X][user.PlayerState.ChunkID.Y].RemoveUser(user)
+	user.PlayerState.PosLock.RUnlock()
 	core.Omap.RemoveUser(user.UID)
 }
 
