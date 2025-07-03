@@ -8,13 +8,14 @@ import (
 	"google.golang.org/protobuf/proto"
 )
 
-type MovementRouter struct {
+type SpeakRouter struct {
 	znet.BaseRouter
 }
 
-func (m *MovementRouter) Handle(request ziface.IRequest) {
+func (s *SpeakRouter) Handle(request ziface.IRequest) {
+	speak := FishingValleyProto.Speak{}
+	_ = proto.Unmarshal(request.GetData(), &speak)
 	user := core.Omap.GetUserByConn(request.GetConnection())
-	movement := FishingValleyProto.Movement{}
-	_ = proto.Unmarshal(request.GetData(), &movement)
-	user.Move(movement.X, movement.Y, movement.Direction)
+	speak.UserName = user.UserName
+	core.Omap.BroadcastAll(7, &speak)
 }

@@ -1,7 +1,10 @@
 package core
 
 import (
+	"github.com/zuishabi/zinx/utils"
 	"github.com/zuishabi/zinx/ziface"
+	"go.uber.org/zap"
+	"google.golang.org/protobuf/proto"
 	"sync"
 )
 
@@ -55,4 +58,15 @@ func (m *OnlineMap) GetAllUsers() (users []*User) {
 		users = append(users, user)
 	}
 	return
+}
+
+// BroadcastAll 将消息广播给服务器中的所有人
+func (m *OnlineMap) BroadcastAll(msgID uint32, msg proto.Message) {
+	m.RLock()
+	defer m.RUnlock()
+	for _, user := range m.um {
+		if err := user.SendMsg(msgID, msg); err != nil {
+			utils.L.Error("发送消息失败", zap.Error(err))
+		}
+	}
 }

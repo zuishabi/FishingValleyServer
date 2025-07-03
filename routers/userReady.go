@@ -2,8 +2,11 @@ package routers
 
 import (
 	"FishingValleyServer/core"
+	FishingValleyProto "FishingValleyServer/protobuf"
+	"github.com/zuishabi/zinx/utils"
 	"github.com/zuishabi/zinx/ziface"
 	"github.com/zuishabi/zinx/znet"
+	"go.uber.org/zap"
 )
 
 // OnUserReadyRouter
@@ -18,4 +21,7 @@ func (o *OnUserReadyRouter) Handle(request ziface.IRequest) {
 	user.OnUserReady()
 	// 将用户加入一个区域
 	core.AddUserToMap(user, 1)
+	if err := user.SendMsg(2, &FishingValleyProto.UserReady{}); err != nil {
+		utils.L.Error("发送消息错误", zap.Error(err))
+	}
 }

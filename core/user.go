@@ -25,11 +25,11 @@ func (u *User) SendMsg(msgID uint32, msg proto.Message) error {
 	return u.Conn.SendBuffMsg(msgID, data)
 }
 
-func (u *User) Move(x int32, y int32) {
+func (u *User) Move(x int32, y int32, direction bool) {
 	u.DirtyState.UpdateCoordinate(Coordinate{
 		X: x,
 		Y: y,
-	})
+	}, direction)
 }
 
 // SendMsgAround 向周围玩家发送消息

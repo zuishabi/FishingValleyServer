@@ -43,10 +43,12 @@ func main() {
 	s.SetOnConnStop(onConnStop)
 	utils.InitLogger(0)
 	s.AddRouter(1, &routers.LoginRouter{})
-	s.AddRouter(3, &routers.MovementRouter{})
 	s.AddRouter(2, &routers.OnUserReadyRouter{})
+	s.AddRouter(3, &routers.MovementRouter{})
 	s.AddRouter(5, &routers.PlayerChunkChangeRouter{})
-	s.AddRouter(10, &routers.PlayerNameRouter{})
+	s.AddRouter(7, &routers.SpeakRouter{})
+	s.AddRouter(8, &routers.PlayerStateChangeRouter{})
+	s.AddRouter(10, &routers.PlayerInfoRouter{})
 	s.Serve()
 }
 
@@ -58,7 +60,7 @@ func gameLoop() {
 		// 将玩家脏数据同步
 		for _, v := range users {
 			if v != nil {
-				v.PlayerState.SyncDirty(&v.DirtyState)
+				v.PlayerState.SyncDirty(v, &v.DirtyState)
 			}
 		}
 		// 同步玩家坐标

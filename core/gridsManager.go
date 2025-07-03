@@ -2,7 +2,6 @@ package core
 
 import (
 	FishingValleyProto "FishingValleyServer/protobuf"
-	"fmt"
 	"github.com/zuishabi/zinx/utils"
 	"go.uber.org/zap"
 	"sync"
@@ -96,8 +95,6 @@ func AddUserToMap(user *User, id uint32) {
 	tx, ty := target.GetGridFromCoordinate(target.SpawnPoint)
 	targetGrid := target.Grids[tx][ty]
 	targetGrid.AddUser(user)
-	fmt.Println(1, ": ", user.UID)
-	fmt.Println(2, ": ", targetGrid.users)
 	// 改变用户的区域id和坐标
 	user.PlayerState.Coordinate = target.SpawnPoint
 	user.PlayerState.AreaID = target.ID

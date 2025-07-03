@@ -15,15 +15,14 @@ message ConfirmLoginResponse{
 }
 
 // 客户端准备完毕 2
-message UserReady{
-
-}
+message UserReady{}
 
 // 用户移动 3
 message Movement{
   uint32 uid = 1;
   int32 x = 2;
   int32 y = 3;
+  bool direction = 4;
 }
 
 // 用户离开游戏 4
@@ -37,6 +36,13 @@ message PlayerChunkChange{
   uint32 chunk_y = 2;
 }
 
+// 玩家区块改变的回应，向周围的区块的玩家发送区块改变的消息 5
+message PlayerChunkChangeRsp{
+  uint32 uid = 1;
+  uint32 chunk_x = 2;
+  uint32  chunk_y = 3;
+}
+
 // 服务器传送玩家(用于传送等) 6
 message TransmitPlayer{
   uint32 area_id = 1; // 传送的区域id
@@ -44,14 +50,28 @@ message TransmitPlayer{
   int32 y = 3;
 }
 
+// 发送一个信息 7
+message Speak{
+  string user_name = 1;
+  string msg = 2;
+}
+
+// 当玩家的状态改变 8
+message PlayerStateChange{
+  uint32 uid = 1;
+  uint32 action = 2;
+}
+
 // 信息请求
-// 请求一个用户的名字 10
-message PlayerNameReq{
+// 请求一个用户的信息 10
+message PlayerInfoReq{
   uint32 uid = 1;
 }
 
-// 请求用户名字的回应 10
-message PlayerNameRsp{
+// 请求用户信息的回应 10
+message PlayerInfoRsp{
   uint32 uid = 1;
-  string name = 2;
+  uint32 state = 2;
+  string name = 3;
+  bool direction = 4;
 }

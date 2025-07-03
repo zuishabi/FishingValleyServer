@@ -9,19 +9,22 @@ import (
 	"google.golang.org/protobuf/proto"
 )
 
-type PlayerNameRouter struct {
+type PlayerInfoRouter struct {
 	znet.BaseRouter
 }
 
-func (p *PlayerNameRouter) Handle(request ziface.IRequest) {
-	req := FishingValleyProto.PlayerNameReq{}
+func (p *PlayerInfoRouter) Handle(request ziface.IRequest) {
+	req := FishingValleyProto.PlayerInfoReq{}
 	_ = proto.Unmarshal(request.GetData(), &req)
 	user := core.Omap.GetUserByConn(request.GetConnection())
 	u := core.Omap.GetUser(req.Uid)
-	fmt.Println("req.uid = ", req.Uid)
-	rsp := FishingValleyProto.PlayerNameRsp{
-		Uid:  u.UID,
-		Name: u.UserName,
+	u.PlayerState.StateLock.RLock()
+	defer u.PlayerState.StateLock.RUnlock()
+	rsp := FishingValleyProto.PlayerInfoRsp{
+		Uid:       u.UID,
+		Name:      u.UserName,
+		State:     u.PlayerState.CurrentState,
+		Direction: u.PlayerState.Direction,
 	}
 	if err := user.SendMsg(10, &rsp); err != nil {
 		fmt.Println(err)

@@ -170,6 +170,7 @@ type Movement struct {
 	Uid           uint32                 `protobuf:"varint,1,opt,name=uid,proto3" json:"uid,omitempty"`
 	X             int32                  `protobuf:"varint,2,opt,name=x,proto3" json:"x,omitempty"`
 	Y             int32                  `protobuf:"varint,3,opt,name=y,proto3" json:"y,omitempty"`
+	Direction     bool                   `protobuf:"varint,4,opt,name=direction,proto3" json:"direction,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -225,7 +226,14 @@ func (x *Movement) GetY() int32 {
 	return 0
 }
 
-// 用户离开房间 4
+func (x *Movement) GetDirection() bool {
+	if x != nil {
+		return x.Direction
+	}
+	return false
+}
+
+// 用户离开游戏 4
 type PlayerLeave struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
 	Uid           uint32                 `protobuf:"varint,1,opt,name=uid,proto3" json:"uid,omitempty"`
@@ -323,6 +331,67 @@ func (x *PlayerChunkChange) GetChunkY() uint32 {
 	return 0
 }
 
+// 玩家区块改变的回应，向周围的区块的玩家发送区块改变的消息 5
+type PlayerChunkChangeRsp struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	Uid           uint32                 `protobuf:"varint,1,opt,name=uid,proto3" json:"uid,omitempty"`
+	ChunkX        uint32                 `protobuf:"varint,2,opt,name=chunk_x,json=chunkX,proto3" json:"chunk_x,omitempty"`
+	ChunkY        uint32                 `protobuf:"varint,3,opt,name=chunk_y,json=chunkY,proto3" json:"chunk_y,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *PlayerChunkChangeRsp) Reset() {
+	*x = PlayerChunkChangeRsp{}
+	mi := &file_protobuf_FishingValley_proto_msgTypes[6]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *PlayerChunkChangeRsp) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*PlayerChunkChangeRsp) ProtoMessage() {}
+
+func (x *PlayerChunkChangeRsp) ProtoReflect() protoreflect.Message {
+	mi := &file_protobuf_FishingValley_proto_msgTypes[6]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use PlayerChunkChangeRsp.ProtoReflect.Descriptor instead.
+func (*PlayerChunkChangeRsp) Descriptor() ([]byte, []int) {
+	return file_protobuf_FishingValley_proto_rawDescGZIP(), []int{6}
+}
+
+func (x *PlayerChunkChangeRsp) GetUid() uint32 {
+	if x != nil {
+		return x.Uid
+	}
+	return 0
+}
+
+func (x *PlayerChunkChangeRsp) GetChunkX() uint32 {
+	if x != nil {
+		return x.ChunkX
+	}
+	return 0
+}
+
+func (x *PlayerChunkChangeRsp) GetChunkY() uint32 {
+	if x != nil {
+		return x.ChunkY
+	}
+	return 0
+}
+
 // 服务器传送玩家(用于传送等) 6
 type TransmitPlayer struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
@@ -335,7 +404,7 @@ type TransmitPlayer struct {
 
 func (x *TransmitPlayer) Reset() {
 	*x = TransmitPlayer{}
-	mi := &file_protobuf_FishingValley_proto_msgTypes[6]
+	mi := &file_protobuf_FishingValley_proto_msgTypes[7]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -347,7 +416,7 @@ func (x *TransmitPlayer) String() string {
 func (*TransmitPlayer) ProtoMessage() {}
 
 func (x *TransmitPlayer) ProtoReflect() protoreflect.Message {
-	mi := &file_protobuf_FishingValley_proto_msgTypes[6]
+	mi := &file_protobuf_FishingValley_proto_msgTypes[7]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -360,7 +429,7 @@ func (x *TransmitPlayer) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use TransmitPlayer.ProtoReflect.Descriptor instead.
 func (*TransmitPlayer) Descriptor() ([]byte, []int) {
-	return file_protobuf_FishingValley_proto_rawDescGZIP(), []int{6}
+	return file_protobuf_FishingValley_proto_rawDescGZIP(), []int{7}
 }
 
 func (x *TransmitPlayer) GetAreaId() uint32 {
@@ -384,75 +453,29 @@ func (x *TransmitPlayer) GetY() int32 {
 	return 0
 }
 
-// 信息请求
-// 请求一个用户的名字 10
-type PlayerNameReq struct {
+// 发送一个信息 7
+type Speak struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
-	Uid           uint32                 `protobuf:"varint,1,opt,name=uid,proto3" json:"uid,omitempty"`
+	UserName      string                 `protobuf:"bytes,1,opt,name=user_name,json=userName,proto3" json:"user_name,omitempty"`
+	Msg           string                 `protobuf:"bytes,2,opt,name=msg,proto3" json:"msg,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
 
-func (x *PlayerNameReq) Reset() {
-	*x = PlayerNameReq{}
-	mi := &file_protobuf_FishingValley_proto_msgTypes[7]
-	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
-	ms.StoreMessageInfo(mi)
-}
-
-func (x *PlayerNameReq) String() string {
-	return protoimpl.X.MessageStringOf(x)
-}
-
-func (*PlayerNameReq) ProtoMessage() {}
-
-func (x *PlayerNameReq) ProtoReflect() protoreflect.Message {
-	mi := &file_protobuf_FishingValley_proto_msgTypes[7]
-	if x != nil {
-		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
-		if ms.LoadMessageInfo() == nil {
-			ms.StoreMessageInfo(mi)
-		}
-		return ms
-	}
-	return mi.MessageOf(x)
-}
-
-// Deprecated: Use PlayerNameReq.ProtoReflect.Descriptor instead.
-func (*PlayerNameReq) Descriptor() ([]byte, []int) {
-	return file_protobuf_FishingValley_proto_rawDescGZIP(), []int{7}
-}
-
-func (x *PlayerNameReq) GetUid() uint32 {
-	if x != nil {
-		return x.Uid
-	}
-	return 0
-}
-
-// 请求用户名字的回应 10
-type PlayerNameRsp struct {
-	state         protoimpl.MessageState `protogen:"open.v1"`
-	Uid           uint32                 `protobuf:"varint,1,opt,name=uid,proto3" json:"uid,omitempty"`
-	Name          string                 `protobuf:"bytes,2,opt,name=name,proto3" json:"name,omitempty"`
-	unknownFields protoimpl.UnknownFields
-	sizeCache     protoimpl.SizeCache
-}
-
-func (x *PlayerNameRsp) Reset() {
-	*x = PlayerNameRsp{}
+func (x *Speak) Reset() {
+	*x = Speak{}
 	mi := &file_protobuf_FishingValley_proto_msgTypes[8]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
 
-func (x *PlayerNameRsp) String() string {
+func (x *Speak) String() string {
 	return protoimpl.X.MessageStringOf(x)
 }
 
-func (*PlayerNameRsp) ProtoMessage() {}
+func (*Speak) ProtoMessage() {}
 
-func (x *PlayerNameRsp) ProtoReflect() protoreflect.Message {
+func (x *Speak) ProtoReflect() protoreflect.Message {
 	mi := &file_protobuf_FishingValley_proto_msgTypes[8]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
@@ -464,23 +487,191 @@ func (x *PlayerNameRsp) ProtoReflect() protoreflect.Message {
 	return mi.MessageOf(x)
 }
 
-// Deprecated: Use PlayerNameRsp.ProtoReflect.Descriptor instead.
-func (*PlayerNameRsp) Descriptor() ([]byte, []int) {
+// Deprecated: Use Speak.ProtoReflect.Descriptor instead.
+func (*Speak) Descriptor() ([]byte, []int) {
 	return file_protobuf_FishingValley_proto_rawDescGZIP(), []int{8}
 }
 
-func (x *PlayerNameRsp) GetUid() uint32 {
+func (x *Speak) GetUserName() string {
+	if x != nil {
+		return x.UserName
+	}
+	return ""
+}
+
+func (x *Speak) GetMsg() string {
+	if x != nil {
+		return x.Msg
+	}
+	return ""
+}
+
+// 当玩家的状态改变 8
+type PlayerStateChange struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	Uid           uint32                 `protobuf:"varint,1,opt,name=uid,proto3" json:"uid,omitempty"`
+	Action        uint32                 `protobuf:"varint,2,opt,name=action,proto3" json:"action,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *PlayerStateChange) Reset() {
+	*x = PlayerStateChange{}
+	mi := &file_protobuf_FishingValley_proto_msgTypes[9]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *PlayerStateChange) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*PlayerStateChange) ProtoMessage() {}
+
+func (x *PlayerStateChange) ProtoReflect() protoreflect.Message {
+	mi := &file_protobuf_FishingValley_proto_msgTypes[9]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use PlayerStateChange.ProtoReflect.Descriptor instead.
+func (*PlayerStateChange) Descriptor() ([]byte, []int) {
+	return file_protobuf_FishingValley_proto_rawDescGZIP(), []int{9}
+}
+
+func (x *PlayerStateChange) GetUid() uint32 {
 	if x != nil {
 		return x.Uid
 	}
 	return 0
 }
 
-func (x *PlayerNameRsp) GetName() string {
+func (x *PlayerStateChange) GetAction() uint32 {
+	if x != nil {
+		return x.Action
+	}
+	return 0
+}
+
+// 信息请求
+// 请求一个用户的信息 10
+type PlayerInfoReq struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	Uid           uint32                 `protobuf:"varint,1,opt,name=uid,proto3" json:"uid,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *PlayerInfoReq) Reset() {
+	*x = PlayerInfoReq{}
+	mi := &file_protobuf_FishingValley_proto_msgTypes[10]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *PlayerInfoReq) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*PlayerInfoReq) ProtoMessage() {}
+
+func (x *PlayerInfoReq) ProtoReflect() protoreflect.Message {
+	mi := &file_protobuf_FishingValley_proto_msgTypes[10]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use PlayerInfoReq.ProtoReflect.Descriptor instead.
+func (*PlayerInfoReq) Descriptor() ([]byte, []int) {
+	return file_protobuf_FishingValley_proto_rawDescGZIP(), []int{10}
+}
+
+func (x *PlayerInfoReq) GetUid() uint32 {
+	if x != nil {
+		return x.Uid
+	}
+	return 0
+}
+
+// 请求用户信息的回应 10
+type PlayerInfoRsp struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	Uid           uint32                 `protobuf:"varint,1,opt,name=uid,proto3" json:"uid,omitempty"`
+	State         uint32                 `protobuf:"varint,2,opt,name=state,proto3" json:"state,omitempty"`
+	Name          string                 `protobuf:"bytes,3,opt,name=name,proto3" json:"name,omitempty"`
+	Direction     bool                   `protobuf:"varint,4,opt,name=direction,proto3" json:"direction,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *PlayerInfoRsp) Reset() {
+	*x = PlayerInfoRsp{}
+	mi := &file_protobuf_FishingValley_proto_msgTypes[11]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *PlayerInfoRsp) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*PlayerInfoRsp) ProtoMessage() {}
+
+func (x *PlayerInfoRsp) ProtoReflect() protoreflect.Message {
+	mi := &file_protobuf_FishingValley_proto_msgTypes[11]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use PlayerInfoRsp.ProtoReflect.Descriptor instead.
+func (*PlayerInfoRsp) Descriptor() ([]byte, []int) {
+	return file_protobuf_FishingValley_proto_rawDescGZIP(), []int{11}
+}
+
+func (x *PlayerInfoRsp) GetUid() uint32 {
+	if x != nil {
+		return x.Uid
+	}
+	return 0
+}
+
+func (x *PlayerInfoRsp) GetState() uint32 {
+	if x != nil {
+		return x.State
+	}
+	return 0
+}
+
+func (x *PlayerInfoRsp) GetName() string {
 	if x != nil {
 		return x.Name
 	}
 	return ""
+}
+
+func (x *PlayerInfoRsp) GetDirection() bool {
+	if x != nil {
+		return x.Direction
+	}
+	return false
 }
 
 var File_protobuf_FishingValley_proto protoreflect.FileDescriptor
@@ -494,25 +685,38 @@ const file_protobuf_FishingValley_proto_rawDesc = "" +
 	"\asuccess\x18\x01 \x01(\bR\asuccess\x12\x0e\n" +
 	"\x02id\x18\x02 \x01(\rR\x02id\x12\x18\n" +
 	"\acontent\x18\x03 \x01(\tR\acontent\"\v\n" +
-	"\tUserReady\"8\n" +
+	"\tUserReady\"V\n" +
 	"\bMovement\x12\x10\n" +
 	"\x03uid\x18\x01 \x01(\rR\x03uid\x12\f\n" +
 	"\x01x\x18\x02 \x01(\x05R\x01x\x12\f\n" +
-	"\x01y\x18\x03 \x01(\x05R\x01y\"\x1f\n" +
+	"\x01y\x18\x03 \x01(\x05R\x01y\x12\x1c\n" +
+	"\tdirection\x18\x04 \x01(\bR\tdirection\"\x1f\n" +
 	"\vPlayerLeave\x12\x10\n" +
 	"\x03uid\x18\x01 \x01(\rR\x03uid\"E\n" +
 	"\x11PlayerChunkChange\x12\x17\n" +
 	"\achunk_x\x18\x01 \x01(\rR\x06chunkX\x12\x17\n" +
-	"\achunk_y\x18\x02 \x01(\rR\x06chunkY\"E\n" +
+	"\achunk_y\x18\x02 \x01(\rR\x06chunkY\"Z\n" +
+	"\x14PlayerChunkChangeRsp\x12\x10\n" +
+	"\x03uid\x18\x01 \x01(\rR\x03uid\x12\x17\n" +
+	"\achunk_x\x18\x02 \x01(\rR\x06chunkX\x12\x17\n" +
+	"\achunk_y\x18\x03 \x01(\rR\x06chunkY\"E\n" +
 	"\x0eTransmitPlayer\x12\x17\n" +
 	"\aarea_id\x18\x01 \x01(\rR\x06areaId\x12\f\n" +
 	"\x01x\x18\x02 \x01(\x05R\x01x\x12\f\n" +
-	"\x01y\x18\x03 \x01(\x05R\x01y\"!\n" +
-	"\rPlayerNameReq\x12\x10\n" +
-	"\x03uid\x18\x01 \x01(\rR\x03uid\"5\n" +
-	"\rPlayerNameRsp\x12\x10\n" +
-	"\x03uid\x18\x01 \x01(\rR\x03uid\x12\x12\n" +
-	"\x04name\x18\x02 \x01(\tR\x04nameB\x15Z\x13/FishingValleyProtob\x06proto3"
+	"\x01y\x18\x03 \x01(\x05R\x01y\"6\n" +
+	"\x05Speak\x12\x1b\n" +
+	"\tuser_name\x18\x01 \x01(\tR\buserName\x12\x10\n" +
+	"\x03msg\x18\x02 \x01(\tR\x03msg\"=\n" +
+	"\x11PlayerStateChange\x12\x10\n" +
+	"\x03uid\x18\x01 \x01(\rR\x03uid\x12\x16\n" +
+	"\x06action\x18\x02 \x01(\rR\x06action\"!\n" +
+	"\rPlayerInfoReq\x12\x10\n" +
+	"\x03uid\x18\x01 \x01(\rR\x03uid\"i\n" +
+	"\rPlayerInfoRsp\x12\x10\n" +
+	"\x03uid\x18\x01 \x01(\rR\x03uid\x12\x14\n" +
+	"\x05state\x18\x02 \x01(\rR\x05state\x12\x12\n" +
+	"\x04name\x18\x03 \x01(\tR\x04name\x12\x1c\n" +
+	"\tdirection\x18\x04 \x01(\bR\tdirectionB\x15Z\x13/FishingValleyProtob\x06proto3"
 
 var (
 	file_protobuf_FishingValley_proto_rawDescOnce sync.Once
@@ -526,7 +730,7 @@ func file_protobuf_FishingValley_proto_rawDescGZIP() []byte {
 	return file_protobuf_FishingValley_proto_rawDescData
 }
 
-var file_protobuf_FishingValley_proto_msgTypes = make([]protoimpl.MessageInfo, 9)
+var file_protobuf_FishingValley_proto_msgTypes = make([]protoimpl.MessageInfo, 12)
 var file_protobuf_FishingValley_proto_goTypes = []any{
 	(*ConfirmLogin)(nil),         // 0: ConfirmLogin
 	(*ConfirmLoginResponse)(nil), // 1: ConfirmLoginResponse
@@ -534,9 +738,12 @@ var file_protobuf_FishingValley_proto_goTypes = []any{
 	(*Movement)(nil),             // 3: Movement
 	(*PlayerLeave)(nil),          // 4: PlayerLeave
 	(*PlayerChunkChange)(nil),    // 5: PlayerChunkChange
-	(*TransmitPlayer)(nil),       // 6: TransmitPlayer
-	(*PlayerNameReq)(nil),        // 7: PlayerNameReq
-	(*PlayerNameRsp)(nil),        // 8: PlayerNameRsp
+	(*PlayerChunkChangeRsp)(nil), // 6: PlayerChunkChangeRsp
+	(*TransmitPlayer)(nil),       // 7: TransmitPlayer
+	(*Speak)(nil),                // 8: Speak
+	(*PlayerStateChange)(nil),    // 9: PlayerStateChange
+	(*PlayerInfoReq)(nil),        // 10: PlayerInfoReq
+	(*PlayerInfoRsp)(nil),        // 11: PlayerInfoRsp
 }
 var file_protobuf_FishingValley_proto_depIdxs = []int32{
 	0, // [0:0] is the sub-list for method output_type
@@ -557,7 +764,7 @@ func file_protobuf_FishingValley_proto_init() {
 			GoPackagePath: reflect.TypeOf(x{}).PkgPath(),
 			RawDescriptor: unsafe.Slice(unsafe.StringData(file_protobuf_FishingValley_proto_rawDesc), len(file_protobuf_FishingValley_proto_rawDesc)),
 			NumEnums:      0,
-			NumMessages:   9,
+			NumMessages:   12,
 			NumExtensions: 0,
 			NumServices:   0,
 		},
